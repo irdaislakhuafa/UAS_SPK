@@ -92,3 +92,18 @@ CREATE VIEW `normalisasi_terbobot` AS
 		(k4 * (SELECT `bobot` FROM `kriteria` WHERE `kriteria`.`kriteria` = "Interview" )) as k4
 	FROM `matriks_ternormalisasi`;
 
+-- view max min (solusi positif dan negatif)
+CREATE VIEW `max_min` AS
+	SELECT
+		MAX(k1) AS k1,
+		MAX(k2) AS k2,
+		MAX(k3) AS k3,
+		MAX(k4) AS k4
+	FROM `normalisasi_terbobot`
+	UNION
+	SELECT
+		MIN(k1),
+		MIN(k2),
+		MIN(k3),
+		MIN(k4)
+	FROM `normalisasi_terbobot`;
