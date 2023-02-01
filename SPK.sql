@@ -86,6 +86,7 @@ CREATE VIEW `matriks_ternormalisasi` AS
 -- view normalisasi terbobot
 CREATE VIEW `normalisasi_terbobot` AS
 	SELECT
+		name,
 		(k1 * (SELECT `bobot` FROM `kriteria` WHERE `kriteria`.`kriteria` = "Pengalaman kerja" )) as k1,
 		(k2 * (SELECT `bobot` FROM `kriteria` WHERE `kriteria`.`kriteria` = "Jenjang Pendidikan" )) as k2,
 		(k3 * (SELECT `bobot` FROM `kriteria` WHERE `kriteria`.`kriteria` = "Menguasai Office" )) as k3,
@@ -109,3 +110,74 @@ CREATE VIEW `max_min` AS
 	FROM `normalisasi_terbobot`;
 -- show this view
 SELECT CONCAT("max  | ", k1) as "name | k1", k2, k3, k4 FROM `max_min`;
+
+-- view jarak solusi ideal positif negatif
+CREATE VIEW `jarak_solusi_ideal_positif_negatif` AS
+	SELECT DISTINCT
+		`normalisasi_terbobot`.`name`,
+		SQRT(
+			-- (($C$53-C46)^2)
+			POWER(((SELECT MAX(k1) FROM `max_min`) - (SELECT k1 FROM `normalisasi_terbobot` AS `nb` WHERE `nb`.`name` = "Anton")), 2) +
+			-- (($D$53-D46)^2)
+			POWER(((SELECT MAX(k2) FROM `max_min`) - (SELECT k2 FROM `normalisasi_terbobot` AS `nb` WHERE `nb`.`name` = "Anton")), 2) +
+			-- (($E$53-E46)^2)
+			POWER(((SELECT MAX(k3) FROM `max_min`) - (SELECT k3 FROM `normalisasi_terbobot` AS `nb` WHERE `nb`.`name` = "Anton")), 2) +
+			-- (($F$53-F46)^2)
+			POWER(((SELECT MAX(k4) FROM `max_min`) - (SELECT k4 FROM `normalisasi_terbobot` AS `nb` WHERE `nb`.`name` = "Anton")), 2))
+		AS positif,
+		SQRT(
+			-- ((C46-$C$54)^2)
+			POWER(((SELECT MIN(k1) FROM `max_min`) - (SELECT k1 FROM `normalisasi_terbobot` AS `nb` WHERE `nb`.`name` = "Anton")), 2) +
+			-- ((D46-$D$54)^2)
+			POWER(((SELECT MIN(k2) FROM `max_min`) - (SELECT k2 FROM `normalisasi_terbobot` AS `nb` WHERE `nb`.`name` = "Anton")), 2) +
+			-- ((E46-$E$54)^2)
+			POWER(((SELECT MIN(k3) FROM `max_min`) - (SELECT k3 FROM `normalisasi_terbobot` AS `nb` WHERE `nb`.`name` = "Anton")), 2) +
+			-- ((F46-$F$54)^2)
+			POWER(((SELECT MIN(k4) FROM `max_min`) - (SELECT k4 FROM `normalisasi_terbobot` AS `nb` WHERE `nb`.`name` = "Anton")), 2))
+		AS negatif
+	FROM `max_min`, `normalisasi_terbobot` WHERE `normalisasi_terbobot`.`name` = "Anton"
+	UNION
+	SELECT DISTINCT
+		`normalisasi_terbobot`.`name`,
+		SQRT(
+			-- (($C$53-C46)^2)
+			POWER(((SELECT MAX(k1) FROM `max_min`) - (SELECT k1 FROM `normalisasi_terbobot` AS `nb` WHERE `nb`.`name` = "Anggi")), 2) +
+			-- (($D$53-D46)^2)
+			POWER(((SELECT MAX(k2) FROM `max_min`) - (SELECT k2 FROM `normalisasi_terbobot` AS `nb` WHERE `nb`.`name` = "Anggi")), 2) +
+			-- (($E$53-E46)^2)
+			POWER(((SELECT MAX(k3) FROM `max_min`) - (SELECT k3 FROM `normalisasi_terbobot` AS `nb` WHERE `nb`.`name` = "Anggi")), 2) +
+			-- (($F$53-F46)^2)
+			POWER(((SELECT MAX(k4) FROM `max_min`) - (SELECT k4 FROM `normalisasi_terbobot` AS `nb` WHERE `nb`.`name` = "Anggi")), 2)),
+		SQRT(
+			-- ((C46-$C$54)^2)
+			POWER(((SELECT MIN(k1) FROM `max_min`) - (SELECT k1 FROM `normalisasi_terbobot` AS `nb` WHERE `nb`.`name` = "Anggi")), 2) +
+			-- ((D46-$D$54)^2)
+			POWER(((SELECT MIN(k2) FROM `max_min`) - (SELECT k2 FROM `normalisasi_terbobot` AS `nb` WHERE `nb`.`name` = "Anggi")), 2) +
+			-- ((E46-$E$54)^2)
+			POWER(((SELECT MIN(k3) FROM `max_min`) - (SELECT k3 FROM `normalisasi_terbobot` AS `nb` WHERE `nb`.`name` = "Anggi")), 2) +
+			-- ((F46-$F$54)^2)
+			POWER(((SELECT MIN(k4) FROM `max_min`) - (SELECT k4 FROM `normalisasi_terbobot` AS `nb` WHERE `nb`.`name` = "Anggi")), 2))
+	FROM `max_min`, `normalisasi_terbobot`  WHERE `normalisasi_terbobot`.`name` = "Anggi"
+	UNION
+	SELECT DISTINCT
+		`normalisasi_terbobot`.`name`,
+		SQRT(
+			-- (($C$53-C46)^2)
+			POWER(((SELECT MAX(k1) FROM `max_min`) - (SELECT k1 FROM `normalisasi_terbobot` AS `nb` WHERE `nb`.`name` = "Budi")), 2) +
+			-- (($D$53-D46)^2)
+			POWER(((SELECT MAX(k2) FROM `max_min`) - (SELECT k2 FROM `normalisasi_terbobot` AS `nb` WHERE `nb`.`name` = "Budi")), 2) +
+			-- (($E$53-E46)^2)
+			POWER(((SELECT MAX(k3) FROM `max_min`) - (SELECT k3 FROM `normalisasi_terbobot` AS `nb` WHERE `nb`.`name` = "Budi")), 2) +
+			-- (($F$53-F46)^2)
+			POWER(((SELECT MAX(k4) FROM `max_min`) - (SELECT k4 FROM `normalisasi_terbobot` AS `nb` WHERE `nb`.`name` = "Budi")), 2)),
+		SQRT(
+			-- ((C46-$C$54)^2)
+			POWER(((SELECT MIN(k1) FROM `max_min`) - (SELECT k1 FROM `normalisasi_terbobot` AS `nb` WHERE `nb`.`name` = "Budi")), 2) +
+			-- ((D46-$D$54)^2)
+			POWER(((SELECT MIN(k2) FROM `max_min`) - (SELECT k2 FROM `normalisasi_terbobot` AS `nb` WHERE `nb`.`name` = "Budi")), 2) +
+			-- ((E46-$E$54)^2)
+			POWER(((SELECT MIN(k3) FROM `max_min`) - (SELECT k3 FROM `normalisasi_terbobot` AS `nb` WHERE `nb`.`name` = "Budi")), 2) +
+			-- ((F46-$F$54)^2)
+			POWER(((SELECT MIN(k4) FROM `max_min`) - (SELECT k4 FROM `normalisasi_terbobot` AS `nb` WHERE `nb`.`name` = "Budi")), 2))
+	FROM `max_min`, `normalisasi_terbobot`  WHERE `normalisasi_terbobot`.`name` = "Budi"
+	GROUP BY `normalisasi_terbobot`.`name`;
