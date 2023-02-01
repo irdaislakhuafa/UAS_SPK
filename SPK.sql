@@ -181,3 +181,13 @@ CREATE VIEW `jarak_solusi_ideal_positif_negatif` AS
 			POWER(((SELECT MIN(k4) FROM `max_min`) - (SELECT k4 FROM `normalisasi_terbobot` AS `nb` WHERE `nb`.`name` = "Budi")), 2))
 	FROM `max_min`, `normalisasi_terbobot`  WHERE `normalisasi_terbobot`.`name` = "Budi"
 	GROUP BY `normalisasi_terbobot`.`name`;
+SELECT * FROM `jarak_solusi_ideal_positif_negatif`; 
+
+-- view hasil_preferensi
+CREATE VIEW `hasil_preferensi` AS
+	SELECT
+		`name`,
+		(`negatif` / (`negatif` + `positif`)) AS `preferensi`,
+		ROW_NUMBER() OVER(ORDER BY (`negatif` / (`negatif` + `positif`)) DESC) AS `ranking`
+	FROM `jarak_solusi_ideal_positif_negatif`
+	ORDER BY `ranking` DESC;
