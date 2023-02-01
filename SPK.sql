@@ -74,8 +74,21 @@ CREATE VIEW `pembagi` AS
 	FROM `data_karyawan`;
 
 -- view matriks ternormalisai
-CREATE VIEW `matriks_ternormalisai` AS
+CREATE VIEW `matriks_ternormalisasi` AS
 	SELECT
 		name,
-		(k1 / (SELECT k1 FROM `pembagi`)) as k1
+		(k1 / (SELECT k1 FROM `pembagi`)) as k1,
+		(k2 / (SELECT k2 FROM `pembagi`)) as k2,
+		(k3 / (SELECT k3 FROM `pembagi`)) as k3,
+		(k4 / (SELECT k4 FROM `pembagi`)) as k4
 	FROM `data_karyawan`;
+
+-- view normalisasi terbobot
+CREATE VIEW `normalisasi_terbobot` AS
+	SELECT
+		(k1 * (SELECT `bobot` FROM `kriteria` WHERE `kriteria`.`kriteria` = "Pengalaman kerja" )) as k1,
+		(k2 * (SELECT `bobot` FROM `kriteria` WHERE `kriteria`.`kriteria` = "Jenjang Pendidikan" )) as k2,
+		(k3 * (SELECT `bobot` FROM `kriteria` WHERE `kriteria`.`kriteria` = "Menguasai Office" )) as k3,
+		(k4 * (SELECT `bobot` FROM `kriteria` WHERE `kriteria`.`kriteria` = "Interview" )) as k4
+	FROM `matriks_ternormalisasi`;
+
