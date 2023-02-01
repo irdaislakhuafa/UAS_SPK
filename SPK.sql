@@ -107,3 +107,5 @@ CREATE VIEW `max_min` AS
 		MIN(k3),
 		MIN(k4)
 	FROM `normalisasi_terbobot`;
+-- show this view
+SELECT CONCAT("max  | ", k1) as "name | k1", k2, k3, k4 FROM `max_min`;
